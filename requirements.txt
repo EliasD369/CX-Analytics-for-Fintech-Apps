@@ -1,2 +1,8 @@
 pandas
 google-play-scraper
+wordcloud
+seaborn
+matplotlib
+nltk
+psycopg2-binary
+python-dotenv
