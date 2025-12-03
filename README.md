@@ -35,7 +35,6 @@ CX_Analytics_for_Fintech_Apps/
 ├─ .env                      # PostgreSQL credentials (local, not committed)
 ├─ export_schema.sh          # Script to export PostgreSQL DB schema and data
 ├─ README.md                 # Project documentation
-```
 
 ## Task Details
 
