@@ -1,90 +1,197 @@
-# CX Analytics for Fintech Apps Project
+CX Analytics for Fintech Apps  Project
+Project Overview
 
-## Project Overview
+This project focuses on analyzing mobile banking app reviews in Ethiopia to derive actionable insights for app improvement. It simulates a real-world data engineering and analytics workflow, including data scraping, preprocessing, sentiment analysis, storage in PostgreSQL, and insights visualization.
 
-This project demonstrates end-to-end data engineering, analysis, and visualization of mobile banking app reviews in Ethiopia. The goal is to collect, preprocess, analyze, and store user reviews from Google Play for three banks: CBE, BOA, and Amole, providing actionable insights into user experience and sentiment.
+Banks Analyzed:
 
-## Project Scope
+CBE
 
-Data Sources: Google Play Store reviews for CBE, BOA, Amole.
-Tasks Completed:
+BOA
 
-  1. **Task 1: Scraping and preprocessing of raw review data.
-  2. Task 2: Exploratory Data Analysis (EDA) and sentiment labeling.
-  3. Task 3: Storage of cleaned reviews in **PostgreSQL**.
+Amole
 
+Tech Stack:
 
-## Folder Structure
+Python 3.10+
 
+Pandas, NumPy, Seaborn, Matplotlib, WordCloud
+
+PostgreSQL (psycopg2 or SQLAlchemy for data insertion)
+
+Project Structure
 CX_Analytics_for_Fintech_Apps/
 │
-├─ scripts/                 # Python scripts
-│   ├─ scraper.py            # Scrapes reviews from Google Play
-│   ├─ preprocessing.py      # Cleans and preprocesses reviews
-│   ├─ config.py             # Project paths and app constants
-│   ├─ eda_helpers.py        # Helper functions for EDA
-│   └─ run_eda.py            # Runs EDA and generates plots
-│
 ├─ data/
-│   ├─ raw/                  # Raw scraped review CSVs
-│   └─ processed/            # Cleaned review CSVs
+│   ├─ raw/                  # Scraped raw reviews
+│   └─ processed/            # Cleaned and processed data + CSV summaries
+│
+├─ scripts/
+│   ├─ config.py             # Project configuration & folder paths
+│   ├─ scraper.py            # Scrapes reviews from app stores
+│   ├─ preprocessing.py      # Cleans and processes raw reviews
+│   ├─ preprocessing_EDA.ipynb # Notebook for initial EDA
+│   ├─ eda_helpers.py        # Helper functions for EDA & visualization
+│   ├─ run_eda.py            # Run all EDA plots automatically
+│   └─ task4_run.py          # Task 4: Insights & recommendations generation
 │
 ├─ reports/
-│   └─ plots/                # EDA visualizations
+│   └─ task4_plots/          # Generated plots for Task 4 insights
 │
-├─ .env                      # PostgreSQL credentials (local, not committed)
-├─ export_schema.sh          # Script to export PostgreSQL DB schema and data
+├─ .env                      # PostgreSQL credentials (ignored in Git)
+├─ export_schema.sh          # Shell script to export PostgreSQL schema/data
 ├─ README.md                 # Project documentation
-```
+└─ requirements.txt          # Python dependencies
 
-## Task Details
+Task Summary
+Task 1: Scraping & Preprocessing
 
-### Task 1 – Data Collection & Preprocessing
+Scraped reviews for CBE, BOA, and Amole using scraper.py.
 
-Goal: Scrape reviews from Google Play and clean text for analysis.
-Key Steps:
+Cleaned and processed data using preprocessing.py:
 
-  * Scrape reviews using `scraper.py`.
-  * Store raw reviews in `data/raw/`.
-  * Clean text (remove links, punctuation, normalize whitespace) using `preprocessing.py`.
-  * Save processed data to `data/processed/cleaned_reviews.csv`.
-Tools Used: Python, `pandas`, `re`, `google-play-scraper`.
+Lowercased text
 
-### Task 2 – Exploratory Data Analysis & Sentiment
+Removed links and non-alphanumeric characters
 
-Goal: Understand review distribution and sentiment trends.
-Key Steps:
+Dropped empty reviews
 
-  Merge cleaned reviews with sentiment labels.
-  Generate plots:
+Added clean_content column
 
-    * Reviews per app
-    * Rating distribution
-    * Average rating over time
-    * Sentiment distribution
-    * Wordclouds and top negative keywords
-  Save plots in `reports/plots/`.
-Tools Used: Python, `pandas`, `seaborn`, `matplotlib`, `wordcloud`.
+Initial EDA performed via preprocessing_EDA.ipynb.
 
-### Task 3 – PostgreSQL Integration
+Output:
 
-Goal: Store processed reviews in a relational database for persistent storage.
-Key Steps:
+data/processed/cleaned_reviews.csv
 
-   Create PostgreSQL database `bank_reviews`.
-   Define tables:
+Review counts per app visualized
 
-    * `banks(bank_id, bank_name, app_name)`
-    * `reviews(review_id, bank_id, review_text, rating, review_date, sentiment_label, sentiment_score, source)`
-  * Insert cleaned reviews via Python using `psycopg2`.
-  * Export DB schema using `export_schema.sh`.
-Tools Used:** PostgreSQL, Python (`psycopg2`), `.env` for credentials.
+Rating distributions analyzed
+
+Task 2: Sentiment Analysis
+
+Performed sentiment scoring (positive/negative) for each review.
+
+Merged sentiment results with cleaned reviews.
+
+Prepared for Task 4 insights extraction.
+
+Output:
+
+data/processed/sentiment_results.csv
+
+Merged dataset ready for insights generation
+
+Task 3: PostgreSQL Storage
+
+Designed relational database bank_reviews with two tables:
+
+Banks Table
+
+Column	Type	Description
+bank_id	SERIAL PK	Unique ID for bank
+bank_name	VARCHAR	Full bank name
+app_name	VARCHAR	Mobile app name
+
+Reviews Table
+
+Column	Type	Description
+review_id	SERIAL PK	Unique review ID
+bank_id	INT FK	Linked bank ID
+review_text	TEXT	Raw review text
+rating	INT	Review rating (1–5)
+review_date	DATE	Review posted date
+sentiment_label	VARCHAR	Positive/Negative
+sentiment_score	FLOAT	Sentiment confidence/score
+source	VARCHAR	Data source (app store)
+
+Data inserted into PostgreSQL using Python (psycopg2).
+
+Verified data integrity with counts and averages.
+
+SQL dump available via export_schema.sh.
+
+Output:
+
+400 reviews inserted successfully
+
+Schema & data ready for analytics
+
+Task 4: Insights & Recommendations
+
+Generated insights from merged review & sentiment dataset.
+
+Drivers (Positive) and Pain Points (Negative) identified per bank:
+
+Bank	Top Drivers (Positive)	Top Pain Points (Negative)
+CBE	good, the, and	the, and, not
+BOA	good, the, and	the, and, this
+Amole	the, and, good	the, and, not
+
+Visualizations generated (saved to reports/task4_plots/):
+
+Sentiment distribution by bank
+
+Rating distributions
+
+Negative reviews WordClouds
+
+Top negative keywords per bank
+
+Recommendations (based on keyword analysis & sentiment trends):
+
+Improve app stability to reduce crashes
+
+Enhance navigation and user experience
+
+Add feature requests based on common negative keywords
+
+How to Run
+
+Install dependencies
+
+pip install -r requirements.txt
 
 
-## Key Metrics & Insights
+Scrape reviews
 
-Total Reviews Collected: >1,000
-Cleaned & Preprocessed Reviews:** Saved in `data/processed/cleaned_reviews.csv`
-EDA Outputs: Distribution of reviews, average ratings, sentiment trends visualized.
-Database: Populated `reviews` and `banks` tables with cleaned review data.
-Initial KPIs: Ready for further sentiment analysis and thematic extraction.
+python scripts/scraper.py
+
+
+Preprocess reviews
+
+python scripts/preprocessing.py
+
+
+Run EDA & generate plots
+
+python scripts/run_eda.py
+
+
+Run Task 4 insights
+
+python scripts/task4_run.py
+
+Notes & Best Practices
+
+Use .env for PostgreSQL credentials; never commit secrets.
+
+Ensure data/raw and data/processed exist before running scripts.
+
+Stopwords filtered to avoid common meaningless words.
+
+Reports and plots are versioned via Git for reproducibility.
+
+Git Branch Workflow
+
+main → Stable code
+
+task-1 → Scraping & preprocessing
+
+task-2 → Sentiment analysis
+
+task-3 → PostgreSQL storage
+
+task-4 → Insights & recommendations
+
+Pull Requests used to merge completed tasks into main.
