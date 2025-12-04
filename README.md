@@ -167,10 +167,6 @@ python scripts/preprocessing.py
 
 Run EDA & generate plots
 
-python scripts/run_eda.py
-=======
->>>>>>> main
-
 
 Run Task 4 insights
 
